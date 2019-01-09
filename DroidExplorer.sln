@@ -17,18 +17,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sqlite", "Sqlite", "{69D52B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "x86", "x86", "{AD3DD178-562E-4A3C-82D6-4D61882D4295}"
 	ProjectSection(SolutionItems) = preProject
-		3rdParty\Sqlite\x86\System.Data.SQLite.DLL = 3rdParty\Sqlite\x86\System.Data.SQLite.DLL
+		3rdParty\Sqlite\x86\System.Data.SQLite.dll = 3rdParty\Sqlite\x86\System.Data.SQLite.dll
 		3rdParty\Sqlite\x86\System.Data.SQLite.exp = 3rdParty\Sqlite\x86\System.Data.SQLite.exp
 		3rdParty\Sqlite\x86\System.Data.SQLite.lib = 3rdParty\Sqlite\x86\System.Data.SQLite.lib
-		3rdParty\Sqlite\x86\System.Data.SQLite.XML = 3rdParty\Sqlite\x86\System.Data.SQLite.XML
+		3rdParty\Sqlite\x86\System.Data.SQLite.xml = 3rdParty\Sqlite\x86\System.Data.SQLite.xml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "x64", "x64", "{5124DEE7-21EA-4663-8DE2-209853FA4882}"
 	ProjectSection(SolutionItems) = preProject
-		3rdParty\Sqlite\x64\System.Data.SQLite.DLL = 3rdParty\Sqlite\x64\System.Data.SQLite.DLL
+		3rdParty\Sqlite\x64\System.Data.SQLite.dll = 3rdParty\Sqlite\x64\System.Data.SQLite.dll
 		3rdParty\Sqlite\x64\System.Data.SQLite.exp = 3rdParty\Sqlite\x64\System.Data.SQLite.exp
 		3rdParty\Sqlite\x64\System.Data.SQLite.lib = 3rdParty\Sqlite\x64\System.Data.SQLite.lib
-		3rdParty\Sqlite\x64\System.Data.SQLite.XML = 3rdParty\Sqlite\x64\System.Data.SQLite.XML
+		3rdParty\Sqlite\x64\System.Data.SQLite.xml = 3rdParty\Sqlite\x64\System.Data.SQLite.xml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{10E51FAF-3EAB-462A-BBFD-E764EF63B832}"

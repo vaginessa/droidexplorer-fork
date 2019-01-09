@@ -1,9 +1,34 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>Managed.AndroidDebugBridge</name>
+        <name>Managed.Adb</name>
     </assembly>
     <members>
+        <member name="T:Managed.Adb.TransportType">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.TransportType.Usb">
+            <summary>
+            usb
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.TransportType.Local">
+            <summary>
+            local
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.TransportType.Any">
+            <summary>
+            any
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.TransportType.Host">
+            <summary>
+            host
+            </summary>
+        </member>
         <member name="T:Managed.Adb.AdbHelper">
             <summary>
             The ADB Helper class
@@ -188,6 +213,21 @@
             <param name="device">The device.</param>
             <param name="localPort">The local port.</param>
             <param name="remotePort">The remote port.</param>
+            <returns></returns>
+            <exception cref="T:Managed.Adb.Exceptions.AdbException">
+            failed to submit the forward command.
+            or
+            Device rejected command:  + resp.Message
+            </exception>
+        </member>
+        <member name="M:Managed.Adb.AdbHelper.CreateReverseForward(System.Net.IPEndPoint,Managed.Adb.Device,System.Int32,System.Int32)">
+            <summary>
+            Creates the reverse forward.
+            </summary>
+            <param name="adbSockAddr">The adb sock addr.</param>
+            <param name="device">The device.</param>
+            <param name="remotePort">The remote port.</param>
+            <param name="localPort">The local port.</param>
             <returns></returns>
             <exception cref="T:Managed.Adb.Exceptions.AdbException">
             failed to submit the forward command.
@@ -585,11 +625,6 @@
             
             </summary>
         </member>
-        <member name="F:Managed.Adb.AndroidDebugBridge._clientSupport">
-            <summary>
-            
-            </summary>
-        </member>
         <member name="P:Managed.Adb.AndroidDebugBridge.SocketAddress">
             <summary>
             Gets or sets the socket address.
@@ -695,24 +730,6 @@
             </summary>
             <param name="e">The <see cref="T:Managed.Adb.ClientEventArgs"/> instance containing the event data.</param>
         </member>
-        <member name="M:Managed.Adb.AndroidDebugBridge.OnDeviceChanged(Managed.Adb.DeviceEventArgs)">
-            <summary>
-            Raises the <see cref="E:DeviceChanged"/> event.
-            </summary>
-            <param name="e">The <see cref="T:Managed.Adb.DeviceEventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="M:Managed.Adb.AndroidDebugBridge.OnDeviceConnected(Managed.Adb.DeviceEventArgs)">
-            <summary>
-            Raises the <see cref="E:DeviceConnected"/> event.
-            </summary>
-            <param name="e">The <see cref="T:Managed.Adb.DeviceEventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="M:Managed.Adb.AndroidDebugBridge.OnDeviceDisconnected(Managed.Adb.DeviceEventArgs)">
-            <summary>
-            Raises the <see cref="E:DeviceDisconnected"/> event.
-            </summary>
-            <param name="e">The <see cref="T:Managed.Adb.DeviceEventArgs"/> instance containing the event data.</param>
-        </member>
         <member name="M:Managed.Adb.AndroidDebugBridge.Start">
             <summary>
             Starts the debug bridge.
@@ -731,6 +748,13 @@
             </summary>
             <returns><c>true</c> if success.</returns>
         </member>
+        <member name="M:Managed.Adb.AndroidDebugBridge.GetDeviceState(System.String)">
+            <summary>
+            Gets the state of the device.
+            </summary>
+            <param name="device">The device.</param>
+            <returns></returns>
+        </member>
         <member name="P:Managed.Adb.AndroidDebugBridge.AdbOsLocation">
             <summary>
             Gets or Sets the adb location on the OS.
@@ -742,22 +766,6 @@
             Gets the devices.
             </summary>
             <value>The devices.</value>
-        </member>
-        <member name="M:Managed.Adb.AndroidDebugBridge.HasInitialDeviceList">
-            <summary>
-            Returns whether the bridge has acquired the initial list from adb after being created.
-            </summary>
-            <remarks>
-            <p/>Calling getDevices() right after createBridge(String, boolean) will
-            generally result in an empty list. This is due to the internal asynchronous communication
-            mechanism with <code>adb</code> that does not guarantee that the IDevice list has been
-            built before the call to getDevices().
-            <p/>The recommended way to get the list of IDevice objects is to create a
-            IDeviceChangeListener object.
-            </remarks>
-            <returns>
-            	<c>true</c> if [has initial device list]; otherwise, <c>false</c>.
-            </returns>
         </member>
         <member name="P:Managed.Adb.AndroidDebugBridge.SelectedClient">
             <summary>
@@ -1421,6 +1429,11 @@
             </summary>
         </member>
         <member name="F:Managed.Adb.ClientData.PRE_INITIALIZED">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Managed.Adb.ClientData.DebuggerStatus">
             <summary>
             
             </summary>
@@ -2246,10 +2259,83 @@
             <param name="bytesToConvert">The number of bytes to use</param>
             <returns>The value built from the given bytes</returns>
         </member>
+        <member name="T:Managed.Adb.DeviceMonitor2">
+            <summary>
+            
+            </summary>
+            <seealso cref="T:Managed.Adb.IDeviceMonitor" />
+        </member>
+        <member name="E:Managed.Adb.DeviceMonitor2.DeviceStateChanged">
+            <summary>
+            Occurs when [device state changed].
+            </summary>
+        </member>
+        <member name="E:Managed.Adb.DeviceMonitor2.Connected">
+            <summary>
+            Occurs when [connected].
+            </summary>
+        </member>
+        <member name="E:Managed.Adb.DeviceMonitor2.Disconnected">
+            <summary>
+            Occurs when [disconnected].
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.DeviceMonitor2.#ctor(Managed.Adb.AndroidDebugBridge,Managed.Adb.IDevice)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Managed.Adb.DeviceMonitor2"/> class.
+            </summary>
+            <param name="bridge">The bridge.</param>
+        </member>
+        <member name="M:Managed.Adb.DeviceMonitor2.#ctor(Managed.Adb.AndroidDebugBridge,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Managed.Adb.DeviceMonitor2"/> class.
+            </summary>
+            <param name="bridge">The bridge.</param>
+            <param name="device">The device.</param>
+        </member>
+        <member name="M:Managed.Adb.DeviceMonitor2.Start">
+            <summary>
+            Starts this instance.
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.DeviceMonitor2.Stop">
+            <summary>
+            Stops this instance.
+            </summary>
+        </member>
         <member name="T:Managed.Adb.Exceptions.AdbCommandRejectedException">
             <summary>
             Exception thrown when adb refuses a command.
             </summary>
+        </member>
+        <member name="M:Managed.Adb.Exceptions.AdbCommandRejectedException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Managed.Adb.Exceptions.AdbCommandRejectedException"/> class.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Managed.Adb.Exceptions.AdbCommandRejectedException.#ctor(System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Managed.Adb.Exceptions.AdbCommandRejectedException"/> class.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="errorDuringDeviceSelection">if set to <c>true</c> [error during device selection].</param>
+        </member>
+        <member name="P:Managed.Adb.Exceptions.AdbCommandRejectedException.IsDeviceOffline">
+            <summary>
+            Gets a value indicating whether this instance is device offline.
+            </summary>
+            <value>
+            <c>true</c> if this instance is device offline; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Exceptions.AdbCommandRejectedException.WasErrorDuringDeviceSelection">
+            <summary>
+            Gets a value indicating whether [was error during device selection].
+            </summary>
+            <value>
+            <c>true</c> if [was error during device selection]; otherwise, <c>false</c>.
+            </value>
         </member>
         <member name="T:Managed.Adb.Exceptions.CommandAbortingException">
             <summary>
@@ -2280,6 +2366,17 @@
             </summary>
             <param name="message">The message.</param>
             <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="T:Managed.Adb.Exceptions.ShellCommandUnresponsiveException">
+            <summary>
+            
+            </summary>
+            <seealso cref="T:Managed.Adb.Exceptions.AdbException" />
+        </member>
+        <member name="M:Managed.Adb.Exceptions.ShellCommandUnresponsiveException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Managed.Adb.Exceptions.ShellCommandUnresponsiveException"/> class.
+            </summary>
         </member>
         <member name="T:Managed.Adb.Exceptions.UnknownOptionException">
             <summary>
@@ -2394,6 +2491,12 @@
             The class name is null or <see cref="P:System.Exception.HResult"/> is zero (0).
               </exception>
         </member>
+        <member name="T:Managed.Adb.Exceptions.PermissionDeniedException">
+            <summary>
+            
+            </summary>
+            <seealso cref="T:System.Exception" />
+        </member>
         <member name="M:Managed.Adb.Exceptions.PermissionDeniedException.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Managed.Adb.Exceptions.PermissionDeniedException"/> class.
@@ -2436,7 +2539,6 @@
             <param name="msg">The MSG.</param>
         </member>
         <member name="T:Managed.Adb.ManagedAdbExtenstions">
-            <ignore>true</ignore>
             <ignore>true</ignore>
             <ignore>true</ignore>
             <ignore>true</ignore>
@@ -2763,6 +2865,28 @@
             <param name="bindingFlags">The binding flags.</param>
             <returns></returns>
         </member>
+        <member name="M:Managed.Adb.ManagedAdbExtenstions.ThrowIfNull``1(``0,System.Linq.Expressions.Expression{System.Func{``0,System.String}})">
+            <summary>
+            Throws if null.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="argument">The argument.</param>
+            <param name="func">The function.</param>
+        </member>
+        <member name="M:Managed.Adb.ManagedAdbExtenstions.ThrowIfNullOrEmpty(System.String,System.Linq.Expressions.Expression{System.Func{System.String,System.String}})">
+            <summary>
+            Throws if null or empty.
+            </summary>
+            <param name="argument">The argument.</param>
+            <param name="func">The function.</param>
+        </member>
+        <member name="M:Managed.Adb.ManagedAdbExtenstions.ThrowIfNullOrWhiteSpace(System.String,System.Linq.Expressions.Expression{System.Func{System.String,System.String}})">
+            <summary>
+            Throws if null or white space.
+            </summary>
+            <param name="argument">The argument.</param>
+            <param name="func">The function.</param>
+        </member>
         <member name="M:Managed.Adb.ManagedAdbExtenstions.Swap32bitsToArray(System.Int32,System.Byte[],System.Int32)">
             <summary>
             Swaps an unsigned value around, and puts the result in an array that can be sent to a device.
@@ -2818,72 +2942,6 @@
             <param name="dateTime">The date time.</param>
             <returns></returns>
         </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.ToUnixEpoch(System.DateTime)">
-            <summary>
-            Converts a DateTime to Unix Epoch
-            </summary>
-            <param name="date">The date.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.ToDateTimeFromUnixEpoch(System.Int32)">
-            <summary>
-            Creates a DateTime from the seconds since Epoch
-            </summary>
-            <param name="seconds">The seconds.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.ToDateTimeFromString(System.String)">
-            <summary>
-            Creates a DateTime from a string
-            </summary>
-            <param name="dateString">The date string.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.ToDateTimeFromString(System.String,System.IFormatProvider)">
-            <summary>
-            Creates a DateTime from a string
-            </summary>
-            <param name="dateString">The date string.</param>
-            <param name="format">The format.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.ToDateTimeFromString(System.String,System.IFormatProvider,System.Globalization.DateTimeStyles)">
-            <summary>
-            Creates a DateTime from a string
-            </summary>
-            <param name="dateString">The date string.</param>
-            <param name="format">The format.</param>
-            <param name="styles">The styles.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.ToDateTimeFromBinary(System.Int64)">
-            <summary>
-            Creates a DateTime from a binary value
-            </summary>
-            <param name="dateData">The date data.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.ToDateTimeFromFileTime(System.Int64)">
-            <summary>
-            Creates a DateTime from a file time
-            </summary>
-            <param name="fileTime">The file time.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.ToDateTimeFromFileTimeUtc(System.Int64)">
-            <summary>
-            Creates a DateTime from a file time UTC
-            </summary>
-            <param name="fileTime">The file time.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.ToDateTimeFromOADate(System.Double)">
-            <summary>
-            Creates a DateTime from an OA Date
-            </summary>
-            <param name="date">The date.</param>
-            <returns></returns>
-        </member>
         <member name="M:Managed.Adb.ManagedAdbExtenstions.IsDirectory(System.String)">
             <summary>
             Determines whether the specified path is directory.
@@ -2927,57 +2985,12 @@
             <param name="path">The path.</param>
             <returns></returns>
         </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.Combine(System.String[])">
-            <summary>
-            Combines the specified paths.
-            </summary>
-            <remarks>This wraps the normal System.IO.Path.Combine to allow for an unlimited list of paths to combine</remarks>
-            <param name="paths">The paths.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.With(System.String,System.Object[])">
-            <summary>
-            Formats the string with the specified arguments
-            </summary>
-            <param name="s">The string.</param>
-            <param name="args">The arguments.</param>
-            <returns>The newly formatted string.</returns>
-        </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.GetBytes(System.String)">
-            <summary>
-            Gets the bytes from a string.
-            </summary>
-            <param name="str">The string.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.GetBytes(System.String,System.Text.Encoding)">
-            <summary>
-            Gets the bytes from a string.
-            </summary>
-            <param name="str">The string.</param>
-            <param name="encoding">The encoding.</param>
-            <returns></returns>
-        </member>
         <member name="M:Managed.Adb.ManagedAdbExtenstions.GetBytes(System.String,System.String)">
             <summary>
             Gets the bytes from a string.
             </summary>
             <param name="str">The string.</param>
             <param name="encoding">The encoding.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.ToHex(System.Byte)">
-            <summary>
-            Converts a byte to the Hex value
-            </summary>
-            <param name="b">The b.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.ToHex(System.Byte[])">
-            <summary>
-            Converts a byte to the Hex value
-            </summary>
-            <param name="byteArray">The byte array.</param>
             <returns></returns>
         </member>
         <member name="M:Managed.Adb.ManagedAdbExtenstions.GetString(System.Byte[])">
@@ -3032,241 +3045,32 @@
             <param name="encoding">The encoding.</param>
             <returns></returns>
         </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.IsNullOrWhiteSpace(System.String)">
+        <member name="T:Managed.Adb.IDeviceMonitor">
             <summary>
-            Determines whether [is null or white space] [the specified source].
+            
             </summary>
-            <param name="source">The source.</param>
-            <returns>
-              <c>true</c> if [is null or white space] [the specified source]; otherwise, <c>false</c>.
-            </returns>
         </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.Match(System.String,System.String)">
+        <member name="E:Managed.Adb.IDeviceMonitor.Connected">
             <summary>
-            Matches the specified source.
+            Occurs when [connected].
             </summary>
-            <param name="source">The source.</param>
-            <param name="pattern">The pattern.</param>
-            <returns></returns>
         </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.Match(System.String,System.String,System.Text.RegularExpressions.RegexOptions)">
+        <member name="E:Managed.Adb.IDeviceMonitor.Disconnected">
             <summary>
-            Matches the specified source.
+            Occurs when [disconnected].
             </summary>
-            <param name="source">The source.</param>
-            <param name="pattern">The pattern.</param>
-            <param name="options">The options.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.IsMatch(System.String,System.String)">
-            <summary>
-            Determines whether the specified source is match.
-            </summary>
-            <param name="source">The source.</param>
-            <param name="pattern">The pattern.</param>
-            <returns>
-              <c>true</c> if the specified source is match; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:Managed.Adb.ManagedAdbExtenstions.IsMatch(System.String,System.String,System.Text.RegularExpressions.RegexOptions)">
-            <summary>
-            Determines whether the specified source is match.
-            </summary>
-            <param name="source">The source.</param>
-            <param name="pattern">The pattern.</param>
-            <param name="options">The options.</param>
-            <returns>
-              <c>true</c> if the specified source is match; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="T:Managed.Adb.IO.BEBinaryReader">
-            <summary> 
-            Big-Endian Binary Reader 
-            </summary> 
-            <ignore>true</ignore>
-        </member>
-        <member name="M:Managed.Adb.IO.BEBinaryReader.ReadInt16">
-            <summary> 
-            Reads a 2-byte signed integer from the current stream and advances the  
-            current position of the stream by two bytes. 
-            </summary> 
-            <returns></returns> 
-        </member>
-        <member name="M:Managed.Adb.IO.BEBinaryReader.ReadInt32">
-            <summary> 
-            Reads a 4-byte signed integer from the current stream and advances the  
-            current position of the stream by four bytes. 
-            </summary> 
-            <returns></returns> 
-        </member>
-        <member name="M:Managed.Adb.IO.BEBinaryReader.ReadInt64">
-            <summary> 
-            Reads an 8-byte signed integer from the current stream and advances  
-            the current position of the stream by four bytes. 
-            </summary> 
-            <returns></returns> 
-        </member>
-        <member name="M:Managed.Adb.IO.BEBinaryReader.ReadSingle">
-            <summary> 
-            Reads a 4-byte floating point value from the current stream and  
-            advances the current position of the stream by four bytes. 
-            </summary> 
-            <returns></returns> 
-        </member>
-        <member name="M:Managed.Adb.IO.BEBinaryReader.ReadDouble">
-            <summary> 
-            Reads an 8-byte floating point value from the current stream and  
-            advances the current position of the stream by eight bytes. 
-            </summary> 
-            <returns></returns> 
-        </member>
-        <member name="T:Managed.Adb.IO.BEBinaryWriter">
-            <summary> 
-            Big-Endian Binary Writer 
-            </summary> 
-            <ignore>true</ignore>
-        </member>
-        <member name="M:Managed.Adb.IO.BEBinaryWriter.Write(System.Int16)">
-            <summary> 
-            Writes a two-byte signed integer to the current stream and advances the stream  
-            position by two bytes. 
-            </summary> 
-            <param name="value"></param> 
-        </member>
-        <member name="M:Managed.Adb.IO.BEBinaryWriter.Write(System.Int32)">
-            <summary> 
-            Writes a four-byte signed integer to the current stream and advances the stream  
-            position by four bytes. 
-            </summary> 
-            <param name="value"></param> 
-        </member>
-        <member name="M:Managed.Adb.IO.BEBinaryWriter.Write(System.Int64)">
-            <summary> 
-            Writes an eight-byte signed integer to the current stream and advances the stream  
-            position by eight bytes. 
-            </summary> 
-            <param name="value"></param> 
-        </member>
-        <member name="M:Managed.Adb.IO.BEBinaryWriter.Write(System.Single)">
-            <summary> 
-            Writes a four-byte floating-point value to the current stream and advances the  
-            stream position by four bytes. 
-            </summary> 
-            <param name="value"></param> 
-        </member>
-        <member name="M:Managed.Adb.IO.BEBinaryWriter.Write(System.Double)">
-            <summary> 
-            Writes an eight-byte floating-point value to the current stream and advances  
-            the stream position by eight bytes. 
-            </summary> 
-            <param name="value"></param> 
-        </member>
-        <member name="T:Managed.Adb.IO.ByteBuffer">
-            <summary>
-            Summary description for ByteBuffer.
-            </summary>
-            <ignore>true</ignore>
-        </member>
-        <member name="M:Managed.Adb.IO.ByteBuffer.#ctor(System.Byte[],Managed.Adb.IO.ByteOrder)">
-            Constructor
-        </member>
-        <member name="M:Managed.Adb.IO.ByteBuffer.length">
-            <summary>
-            Return length as int, o/w, we can use Length (long) directly
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.IO.ByteBuffer.Skip(System.Int32)">
-            <summary>
-            Skip bytes
-            </summary>
-            <param name="count">How many bytes to skip</param>
-            <returns>Actual bytes skipped</returns>
-        </member>
-        <member name="M:Managed.Adb.IO.ByteBuffer.Skip">
-            <summary>
-            Skip one byte
-            </summary>
-            <returns>Actual bytes skipped</returns>
-        </member>
-        <member name="M:Managed.Adb.IO.ByteBuffer.Write(Managed.Adb.IO.ByteBuffer)">
-            <summary>
-            ByteBuffer
-            </summary>
-            <param name="data"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.IO.ByteBuffer.Write(System.Byte)">
-            <summary>
-            Byte
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.IO.ByteBuffer.Write(System.Byte[])">
-            <summary>
-            Bytes
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.IO.ByteBuffer.Write(System.Int16)">
-            <summary>
-            Short
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.IO.ByteBuffer.Write(System.Int32)">
-            <summary>
-            Int
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.IO.ByteBuffer.Write(System.Int64)">
-            <summary>
-            Long
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.IO.ByteBuffer.Write(System.Single)">
-            <summary>
-            Float
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.IO.ByteBuffer.Write(System.Double)">
-            <summary>
-            Double
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.IO.ByteBuffer.Write(System.String)">
-            <summary>
-            String
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.IO.ByteBuffer.Write(System.Boolean)">
-            <summary>
-            Boolean
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.IO.ByteBuffer.Wrap(System.Byte[])">
-            Public Class Methods
         </member>
         <member name="T:Managed.Adb.IO.ByteOrder">
             <summary>
             
             </summary>
             <ignore>true</ignore>
+        </member>
+        <member name="M:Managed.Adb.IO.ByteOrder.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Managed.Adb.IO.ByteOrder"/> class.
+            </summary>
+            <param name="name">The name.</param>
         </member>
         <member name="F:Managed.Adb.IO.ByteOrder.BIG_ENDIAN">
             <summary>
@@ -3293,6 +3097,38 @@
             <returns>
             A <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
             </returns>
+        </member>
+        <member name="P:Managed.Adb.IO.ScreenResolution.Instance">
+            <summary>
+            Gets the instance.
+            </summary>
+            <value>
+            The instance.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.IO.ScreenResolution.Sizes">
+            <summary>
+            Gets the sizes.
+            </summary>
+            <value>
+            The sizes.
+            </value>
+        </member>
+        <member name="M:Managed.Adb.IO.ScreenResolution.CalculateSize(System.Int64)">
+            <summary>
+            Calculates the size.
+            </summary>
+            <param name="pixels">The pixels.</param>
+            <returns></returns>
+            <exception cref="T:System.IndexOutOfRangeException"></exception>
+        </member>
+        <member name="M:Managed.Adb.IO.ScreenResolution.PixelsFromSize(System.Drawing.Size)">
+            <summary>
+            Pixelses from size.
+            </summary>
+            <param name="size">The size.</param>
+            <returns></returns>
+            <exception cref="T:System.IndexOutOfRangeException"></exception>
         </member>
         <member name="T:Managed.Adb.IO.LinuxPath">
             <summary>
@@ -3344,15 +3180,6 @@
             Invalid characters for a file/directory path
             </summary>
         </member>
-        <member name="M:Managed.Adb.IO.LinuxPath.CanPathCircumventSecurityNative(System.String)">
-            <summary>
-            Determines whether this instance [can path circumvent security native] the specified part of path.
-            </summary>
-            <param name="partOfPath">The part of path.</param>
-            <returns>
-              <c>true</c> if this instance [can path circumvent security native] the specified part of path; otherwise, <c>false</c>.
-            </returns>
-        </member>
         <member name="M:Managed.Adb.IO.LinuxPath.ChangeExtension(System.String,System.String)">
             <summary>Changes the extension of a path string.</summary>
             <returns>A string containing the modified path information.On Windows-based desktop platforms, if path is null or an empty string (""), the path information is returned unmodified. If extension is null, the returned string contains the specified path with its extension removed. If path has no extension, and extension is not null, the returned path string contains extension appended to the end of path.</returns>
@@ -3361,72 +3188,17 @@
             <exception cref="T:System.ArgumentException">The path contains one or more of the invalid characters defined in <see cref="F:System.IO.Path.InvalidPathChars"></see>, or contains a wildcard character. </exception>
             <filterpriority>1</filterpriority>
         </member>
-        <member name="M:Managed.Adb.IO.LinuxPath.CharArrayStartsWithOrdinal(System.Char*,System.Int32,System.String,System.Boolean)">
-            <summary>
-            Checks if the char array starts with ordinal
-            </summary>
-            <param name="array">The array.</param>
-            <param name="numChars">The num chars.</param>
-            <param name="compareTo">The compare to.</param>
-            <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.IO.LinuxPath.CharArrayStartsWithOrdinal(System.Char[],System.Int32,System.String,System.Boolean)">
-            <summary>
-            Checks if the char array starts with ordinal
-            </summary>
-            <param name="array">The array.</param>
-            <param name="numChars">The num chars.</param>
-            <param name="compareTo">The compare to.</param>
-            <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
-            <returns></returns>
-        </member>
         <member name="M:Managed.Adb.IO.LinuxPath.CheckInvalidPathChars(System.String)">
             <summary>
             Checks the invalid path chars.
             </summary>
             <param name="path">The path.</param>
         </member>
-        <member name="M:Managed.Adb.IO.LinuxPath.Combine(System.String,System.String)">
-            <summary>Combines two path strings.</summary>
-            <returns>A string containing the combined paths. If one of the specified paths is a zero-length string, this method returns the other path. If path2 contains an absolute path, this method returns path2.</returns>
-            <param name="path2">The second path. </param>
-            <param name="path1">The first path. </param>
-            <exception cref="T:System.ArgumentNullException">path1 or path2 is null. </exception>
-            <exception cref="T:System.ArgumentException">path1 or path2 contain one or more of the invalid characters defined in <see cref="F:System.IO.Path.InvalidPathChars"></see>, or contains a wildcard character. </exception>
-        </member>
-        <member name="M:Managed.Adb.IO.LinuxPath.Combine(System.String,System.String,System.String)">
-            <summary>
-            Combine the specified paths to form one path
-            </summary>
-            <param name="path1">The path1.</param>
-            <param name="path2">The path2.</param>
-            <param name="path3">The path3.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.IO.LinuxPath.Combine(System.String,System.String,System.String,System.String)">
-            <summary>
-            Combine the specified paths to form one path
-            </summary>
-            <param name="path1">The path1.</param>
-            <param name="path2">The path2.</param>
-            <param name="path3">The path3.</param>
-            <param name="path4">The path4.</param>
-            <returns></returns>
-        </member>
         <member name="M:Managed.Adb.IO.LinuxPath.Combine(System.String[])">
             <summary>
             Combine the specified paths to form one path
             </summary>
             <param name="paths">The paths.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Managed.Adb.IO.LinuxPath.CombineNoChecks(System.String,System.String)">
-            <summary>
-            Combines the path with no checks.
-            </summary>
-            <param name="path1">The path1.</param>
-            <param name="path2">The path2.</param>
             <returns></returns>
         </member>
         <member name="M:Managed.Adb.IO.LinuxPath.GetDirectoryName(System.String)">
@@ -3501,14 +3273,6 @@
             <exception cref="T:System.ArgumentException">path contains one or more of the invalid characters defined in <see cref="F:System.IO.Path.InvalidPathChars"></see>, or contains a wildcard character. </exception>
             <filterpriority>1</filterpriority>
         </member>
-        <member name="M:Managed.Adb.IO.LinuxPath.InternalCombine(System.String,System.String)">
-            <summary>
-            Combine the specified paths to form one path
-            </summary>
-            <param name="path1">The path1.</param>
-            <param name="path2">The path2.</param>
-            <returns></returns>
-        </member>
         <member name="M:Managed.Adb.IO.LinuxPath.IsPathRooted(System.String)">
             <summary>Gets a value indicating whether the specified path string contains absolute or relative path information.</summary>
             <returns>true if path contains an absolute path; otherwise, false.</returns>
@@ -3522,6 +3286,7 @@
             </summary>
             <param name="path">The path.</param>
             <returns></returns>
+            <exception cref="T:System.ArgumentNullException">When path is null.</exception>
         </member>
         <member name="M:Managed.Adb.IO.LinuxPath.Quote(System.String)">
             <summary>
@@ -3534,6 +3299,35 @@
             <summary>
             A class that represents Rgb565 Image information
             </summary>
+        </member>
+        <member name="M:Managed.Adb.IO.Rgb565.ToImage(System.String)">
+            <summary>
+            Reads the file and returns the RGB565 Image
+            </summary>
+            <param name="file">The file.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Managed.Adb.IO.Rgb565.ToImage(System.IO.Stream)">
+            <summary>
+            Reads the file and returns the RGB565 Image
+            </summary>
+            <param name="stream">The stream.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Managed.Adb.IO.Rgb565.ToImage(System.Byte[])">
+            <summary>
+            Reads the file and returns the RGB565 Image
+            </summary>
+            <param name="buffer">The buffer.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Managed.Adb.IO.Rgb565.ToImage(System.Drawing.Imaging.PixelFormat,System.Byte[])">
+            <summary>
+            Reads the file and returns the RGB565 Image
+            </summary>
+            <param name="format">The format.</param>
+            <param name="buffer">The buffer.</param>
+            <returns></returns>
         </member>
         <member name="M:Managed.Adb.IO.Rgb565.ToImage(System.Drawing.Imaging.PixelFormat,System.Byte[],System.Int32,System.Int32)">
             <summary>
@@ -3570,6 +3364,11 @@
             <param name="stream">The stream.</param>
             <returns></returns>
         </member>
+        <member name="T:Managed.Adb.Logs.ILogListener">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:Managed.Adb.Logs.ILogListener.NewEntry(Managed.Adb.Logs.LogEntry)">
             <summary>
             Sent when a new LogEntry has been parsed by the LogReceiver.
@@ -3583,6 +3382,145 @@
             <param name="data">the raw data buffer.</param>
             <param name="offset">the offset into the buffer signaling the beginning of the new data.</param>
             <param name="length">the length of the new data.</param>
+        </member>
+        <member name="T:Managed.Adb.Logs.LogEntry">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Managed.Adb.Logs.LogEntry.Length">
+            <summary>
+            Gets or sets the length.
+            </summary>
+            <value>
+            The length.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Logs.LogEntry.ProcessId">
+            <summary>
+            Gets or sets the process identifier.
+            </summary>
+            <value>
+            The process identifier.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Logs.LogEntry.ThreadId">
+            <summary>
+            Gets or sets the thread identifier.
+            </summary>
+            <value>
+            The thread identifier.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Logs.LogEntry.TimeStamp">
+            <summary>
+            Gets or sets the time stamp.
+            </summary>
+            <value>
+            The time stamp.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Logs.LogEntry.NanoSeconds">
+            <summary>
+            Gets or sets the nano seconds.
+            </summary>
+            <value>
+            The nano seconds.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Logs.LogEntry.Data">
+            <summary>
+            Gets or sets the data.
+            </summary>
+            <value>
+            The data.
+            </value>
+        </member>
+        <member name="T:Managed.Adb.Logs.LogReceiver">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.Logs.LogReceiver.ENTRY_HEADER_SIZE">
+            <summary>
+            The entr y_ heade r_ size
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.Logs.LogReceiver.#ctor(Managed.Adb.Logs.ILogListener)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Managed.Adb.Logs.LogReceiver"/> class.
+            </summary>
+            <param name="listener">The listener.</param>
+        </member>
+        <member name="P:Managed.Adb.Logs.LogReceiver.EntryDataOffset">
+            <summary>
+            Gets or sets the entry data offset.
+            </summary>
+            <value>
+            The entry data offset.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Logs.LogReceiver.EntryHeaderOffset">
+            <summary>
+            Gets or sets the entry header offset.
+            </summary>
+            <value>
+            The entry header offset.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Logs.LogReceiver.EntryHeaderBuffer">
+            <summary>
+            Gets or sets the entry header buffer.
+            </summary>
+            <value>
+            The entry header buffer.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Logs.LogReceiver.CurrentEntry">
+            <summary>
+            Gets or sets the current entry.
+            </summary>
+            <value>
+            The current entry.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Logs.LogReceiver.Listener">
+            <summary>
+            Gets or sets the listener.
+            </summary>
+            <value>
+            The listener.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Logs.LogReceiver.IsCancelled">
+            <summary>
+            Gets a value indicating whether this instance is cancelled.
+            </summary>
+            <value>
+            <c>true</c> if this instance is cancelled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="M:Managed.Adb.Logs.LogReceiver.Cancel">
+            <summary>
+            Cancels this instance.
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.Logs.LogReceiver.ParseNewData(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Parses the new data.
+            </summary>
+            <param name="data">The data.</param>
+            <param name="offset">The offset.</param>
+            <param name="length">The length.</param>
+        </member>
+        <member name="M:Managed.Adb.Logs.LogReceiver.CreateEntry(System.Byte[],System.Int32)">
+            <summary>
+            Creates the entry.
+            </summary>
+            <param name="data">The data.</param>
+            <param name="offset">The offset.</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException">Buffer not big enough to hold full LoggerEntry header</exception>
         </member>
         <member name="T:Managed.Adb.RawImage">
             <summary>
@@ -3680,15 +3618,26 @@
             @param version the version of the protocol.
             @param buf the buffer to read from.
             @return true if success
+            <summary>
+            Reads the header.
+            </summary>
+            <param name="version">The version.</param>
+            <param name="buf">The buf.</param>
+            <returns></returns>
         </member>
         <member name="M:Managed.Adb.RawImage.GetHeaderSize(System.Int32)">
+            <summary>
             Returns the size of the header for a specific version of the framebuffer adb protocol.
-            @param version the version of the protocol
-            @return the number of int that makes up the header.
+            </summary>
+            <param name="version">the version of the protocol.</param>
+            <returns>the number of int that makes up the header.</returns>
         </member>
         <member name="M:Managed.Adb.RawImage.GetRotated">
+            <summary>
             Returns a rotated version of the image
             The image is rotated counter-clockwise.
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Managed.Adb.RawImage.ToString">
             <summary>
@@ -3711,6 +3660,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Managed.Adb.RawImage.Swap(System.Byte[])">
+            <summary>
+            Swaps the specified b.
+            </summary>
+            <param name="b">The b.</param>
+            <returns></returns>
+        </member>
         <member name="T:Managed.Adb.BatteryReceiver">
             <summary>
             
@@ -3729,6 +3685,12 @@
             Processes the new lines.
             </summary>
             <param name="lines">The lines.</param>
+        </member>
+        <member name="T:Managed.Adb.CommandErrorReceiver">
+            <summary>
+            
+            </summary>
+            <seealso cref="T:Managed.Adb.MultiLineReceiver" />
         </member>
         <member name="M:Managed.Adb.CommandErrorReceiver.#ctor">
             <summary>
@@ -3787,6 +3749,12 @@
             </summary>
             <param name="lines">The lines.</param>
         </member>
+        <member name="T:Managed.Adb.DdmPreferences">
+            <summary>
+            
+            </summary>
+            <ignore>true</ignore>
+        </member>
         <member name="F:Managed.Adb.DdmPreferences.DEFAULT_INITIAL_THREAD_UPDATE">
             Default value for thread update flag upon client connection. 
         </member>
@@ -3805,14 +3773,82 @@
         <member name="F:Managed.Adb.DdmPreferences.DEFAULT_TIMEOUT">
             Default timeout values for adb connection (milliseconds) 
         </member>
+        <member name="M:Managed.Adb.DdmPreferences.#cctor">
+            <summary>
+            Initializes the <see cref="T:Managed.Adb.DdmPreferences"/> class.
+            </summary>
+        </member>
+        <member name="P:Managed.Adb.DdmPreferences.Timeout">
+            <summary>
+            Gets or sets the timeout.
+            </summary>
+            <value>
+            The timeout.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.DdmPreferences.LogLevel">
+            <summary>
+            Gets or sets the log level.
+            </summary>
+            <value>
+            The log level.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.DdmPreferences.DebugPortBase">
+            <summary>
+            Gets or sets the debug port base.
+            </summary>
+            <value>
+            The debug port base.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.DdmPreferences.SelectedDebugPort">
+            <summary>
+            Gets or sets the selected debug port.
+            </summary>
+            <value>
+            The selected debug port.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.DdmPreferences.InitialThreadUpdate">
+            <summary>
+            Gets or sets a value indicating whether [initial thread update].
+            </summary>
+            <value>
+              <c>true</c> if [initial thread update]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.DdmPreferences.InitialHeapUpdate">
+            <summary>
+            Gets or sets a value indicating whether [initial heap update].
+            </summary>
+            <value>
+              <c>true</c> if [initial heap update]; otherwise, <c>false</c>.
+            </value>
+        </member>
         <member name="T:Managed.Adb.DebugPortManager">
             <summary>
             Centralized point to provide a IDebugPortProvider to ddmlib.
             </summary>
         </member>
+        <member name="F:Managed.Adb.DebugPortManager.NO_STATIC_PORT">
+            <summary>
+            no static port
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.DebugPortManager.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Managed.Adb.DebugPortManager"/> class.
+            </summary>
+        </member>
         <member name="P:Managed.Adb.DebugPortManager.Provider">
             <summary>
             Gets or sets the IDebugPortProvider that will be used when a new Client requests
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.DebugPortManager._instance">
+            <summary>
+            The _instance
             </summary>
         </member>
         <member name="P:Managed.Adb.DebugPortManager.Instance">
@@ -3953,6 +3989,35 @@
             Removes the device.
             </summary>
             <param name="device">The device.</param>
+        </member>
+        <member name="M:Managed.Adb.DeviceMonitor.QueryNewDeviceForEnvironmentVariables(Managed.Adb.Device)">
+            <summary>
+            Queries the new device for environment variables.
+            </summary>
+            <param name="device">The device.</param>
+        </member>
+        <member name="M:Managed.Adb.DeviceMonitor.QueryNewDeviceForMountingPoint(Managed.Adb.Device)">
+            <summary>
+            Queries the new device for mounting point.
+            </summary>
+            <param name="device">The device.</param>
+        </member>
+        <member name="M:Managed.Adb.DeviceMonitor.StartMonitoringDevice(Managed.Adb.Device)">
+            <summary>
+            Starts the monitoring device.
+            </summary>
+            <param name="device">The device.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Managed.Adb.DeviceMonitor.StartDeviceMonitorThread">
+            <summary>
+            Starts the device monitor thread.
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.DeviceMonitor.DeviceClientMonitorLoop">
+            <summary>
+            Devices the client monitor loop.
+            </summary>
         </member>
         <member name="M:Managed.Adb.DeviceMonitor.SendDeviceMonitoringRequest(System.Net.Sockets.Socket,Managed.Adb.Device)">
             <summary>
@@ -4224,6 +4289,166 @@
             </summary>
             <value>The client.</value>
         </member>
+        <member name="T:Managed.Adb.Debugger">
+            <summary>
+            
+            </summary>
+            <seealso cref="T:Managed.Adb.IPacketConsumer" />
+        </member>
+        <member name="T:Managed.Adb.Debugger.ConnectionStates">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.Debugger.ConnectionStates.NotConnected">
+            <summary>
+            not connected
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.Debugger.ConnectionStates.AwaitShake">
+            <summary>
+            await shake
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.Debugger.ConnectionStates.Ready">
+            <summary>
+            ready
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.Debugger.#ctor(Managed.Adb.IClient,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Managed.Adb.Debugger"/> class.
+            </summary>
+            <param name="client">The client.</param>
+            <param name="listenPort">The listen port.</param>
+        </member>
+        <member name="P:Managed.Adb.Debugger.ReadBuffer">
+            <summary>
+            Gets or sets the read buffer.
+            </summary>
+            <value>
+            The read buffer.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Debugger.PreDataBuffer">
+            <summary>
+            Gets or sets the pre data buffer.
+            </summary>
+            <value>
+            The pre data buffer.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Debugger.ListenChannel">
+            <summary>
+            Gets or sets the listen channel.
+            </summary>
+            <value>
+            The listen channel.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Debugger.Channel">
+            <summary>
+            Gets or sets the channel.
+            </summary>
+            <value>
+            The channel.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Debugger.Client">
+            <summary>
+            Gets or sets the client.
+            </summary>
+            <value>
+            The client.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Debugger.ListenPort">
+            <summary>
+            Gets or sets the listen port.
+            </summary>
+            <value>
+            The listen port.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Debugger.ConnectionState">
+            <summary>
+            Gets or sets the state of the connection.
+            </summary>
+            <value>
+            The state of the connection.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Debugger.IsDebuggerAttached">
+            <summary>
+            Gets a value indicating whether this instance is debugger attached.
+            </summary>
+            <value>
+            <c>true</c> if this instance is debugger attached; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="M:Managed.Adb.Debugger.Read">
+            <summary>
+            Reads this instance.
+            </summary>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:Managed.Adb.Debugger.GetJdwpPacket">
+            <summary>
+            Gets the JDWP packet.
+            </summary>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:Managed.Adb.Debugger.ForwardPacketToClient(System.Object)">
+            <summary>
+            Forwards the packet to client.
+            </summary>
+            <param name="packet">The packet.</param>
+        </member>
+        <member name="M:Managed.Adb.Debugger.SendHandshake">
+            <summary>
+            Sends the handshake.
+            </summary>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:Managed.Adb.Debugger.SendAndConsume(System.Object)">
+            <summary>
+            Sends the and consume.
+            </summary>
+            <param name="packet">The packet.</param>
+        </member>
+        <member name="M:Managed.Adb.Debugger.Accept">
+            <summary>
+            Accepts this instance.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Managed.Adb.Debugger.Accept(System.Net.Sockets.Socket)">
+            <summary>
+            Accepts the specified listen chan.
+            </summary>
+            <param name="listenChan">The listen chan.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Managed.Adb.Debugger.CloseData">
+            <summary>
+            Closes the data.
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.Debugger.Close">
+            <summary>
+            Closes this instance.
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.Debugger.ToString">
+            <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+        </member>
         <member name="T:Managed.Adb.DeviceState">
             <summary>
             
@@ -4262,6 +4487,21 @@
         <member name="T:Managed.Adb.Device">
             <summary>
             
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.Device.MNT_EXTERNAL_STORAGE">
+            <summary>
+            The mnt external storage
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.Device.MNT_DATA">
+            <summary>
+            mnt data
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.Device.MNT_ROOT">
+            <summary>
+            The mnt root
             </summary>
         </member>
         <member name="E:Managed.Adb.Device.StateChanged">
@@ -4402,6 +4642,14 @@
             </summary>
             <value>
             The endpoint.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.Device.TransportType">
+            <summary>
+            Gets the type of the transport used to connect to this device.
+            </summary>
+            <value>
+            The type of the transport.
             </value>
         </member>
         <member name="P:Managed.Adb.Device.AvdName">
@@ -4648,6 +4896,7 @@
             </summary>
             <param name="command">The command.</param>
             <param name="receiver">The receiver.</param>
+            <param name="timeout">The timeout.</param>
         </member>
         <member name="M:Managed.Adb.Device.ExecuteRootShellCommand(System.String,Managed.Adb.IShellOutputReceiver)">
             <summary>
@@ -4694,13 +4943,22 @@
             <param name="remotePort">the remote port.</param>
             <returns><code>true</code> if success.</returns>
         </member>
+        <member name="M:Managed.Adb.Device.CreateReverseForward(System.Int32,System.Int32)">
+            <summary>
+            Creates a reverse port forwarding between a local and a remote port.
+            </summary>
+            <param name="remotePort">the remote port to forward</param>
+            <param name="localPort">the local port.</param>
+            <returns><code>true</code> if success.</returns>
+        </member>
         <member name="M:Managed.Adb.Device.RemoveForward(System.Int32)">
             <summary>
             Removes a port forwarding between a local and a remote port.
             </summary>
             <param name="localPort">the local port to forward</param>
-            <param name="remotePort">the remote port.</param>
-            <returns><code>true</code> if success.</returns>
+            <returns>
+              <code>true</code> if success.
+            </returns>
         </member>
         <member name="M:Managed.Adb.Device.InstallPackage(System.String,System.Boolean)">
             <summary>
@@ -4738,9 +4996,8 @@
             Uninstall an package from the device.
             </summary>
             <param name="packageName">Name of the package.</param>
+            <exception cref="T:Managed.Adb.Exceptions.PackageInstallationException"></exception>
             <exception cref="T:System.IO.IOException"></exception>
-              
-            <exception cref="!:PackageInstallException"></exception>
         </member>
         <member name="M:Managed.Adb.Device.OnStateChanged(System.EventArgs)">
             <summary>
@@ -4760,7 +5017,13 @@
             </summary>
             <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
         </member>
-        <member name="M:Managed.Adb.DeviceEventArgs.#ctor(Managed.Adb.IDevice)">
+        <member name="T:Managed.Adb.DeviceEventArgs">
+            <summary>
+            
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+        </member>
+        <member name="M:Managed.Adb.DeviceEventArgs.#ctor(System.String,Managed.Adb.DeviceState)">
             <summary>
             Initializes a new instance of the <see cref="T:Managed.Adb.DeviceEventArgs"/> class.
             </summary>
@@ -4771,6 +5034,12 @@
             Gets the device.
             </summary>
             <value>The device.</value>
+        </member>
+        <member name="T:Managed.Adb.ErrorCodeHelper">
+            <summary>
+            
+            </summary>
+            <ignore>true</ignore>
         </member>
         <member name="F:Managed.Adb.ErrorCodeHelper.RESULT_OK">
             Result code for transfer success. 
@@ -4817,6 +5086,13 @@
         <member name="F:Managed.Adb.ErrorCodeHelper.RESULT_BUFFER_OVERRUN">
             Result code for receiving too much data from the remove device at once 
         </member>
+        <member name="M:Managed.Adb.ErrorCodeHelper.ErrorCodeToString(System.Int32)">
+            <summary>
+            Errors the code to string.
+            </summary>
+            <param name="code">The code.</param>
+            <returns></returns>
+        </member>
         <member name="T:Managed.Adb.FileEntry">
             <summary>
             Represents a file entry on a device
@@ -4829,6 +5105,14 @@
             <param name="device">The device.</param>
             <param name="path">The path.</param>
             <remarks>This does not create the FileEntry on disk. It only creates the FileEntry object.</remarks>
+            <returns></returns>
+        </member>
+        <member name="M:Managed.Adb.FileEntry.CreateNoPermissions(Managed.Adb.Device,System.String)">
+            <summary>
+            Creates the the FileEntry without permissions specified.
+            </summary>
+            <param name="device">The device.</param>
+            <param name="path">The path.</param>
             <returns></returns>
         </member>
         <member name="M:Managed.Adb.FileEntry.Find(Managed.Adb.Device,System.String)">
@@ -5265,13 +5549,6 @@
             
             </summary>
         </member>
-        <member name="M:Managed.Adb.FileListingService.#ctor(Managed.Adb.Device,System.Boolean)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Managed.Adb.FileListingService"/> class.
-            </summary>
-            <param name="device">The device.</param>
-            <param name="forceBusyBox">if set to <c>true</c> [force busy box].</param>
-        </member>
         <member name="M:Managed.Adb.FileListingService.#ctor(Managed.Adb.Device)">
             <summary>
             Initializes a new instance of the <see cref="T:Managed.Adb.FileListingService"/> class.
@@ -5289,12 +5566,6 @@
             Gets or sets the root.
             </summary>
             <value>The root.</value>
-        </member>
-        <member name="P:Managed.Adb.FileListingService.ForceBusyBox">
-            <summary>
-            Gets or sets a value indicating whether [force busy box].
-            </summary>
-            <value><c>true</c> if [force busy box]; otherwise, <c>false</c>.</value>
         </member>
         <member name="M:Managed.Adb.FileListingService.GetChildren(Managed.Adb.FileEntry,System.Boolean,Managed.Adb.IListingReceiver)">
             <summary>
@@ -5348,6 +5619,69 @@
             <param name="path">The path.</param>
             <returns></returns>
         </member>
+        <member name="T:Managed.Adb.FilePermissions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.FilePermissions.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Managed.Adb.FilePermissions"/> class.
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.FilePermissions.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Managed.Adb.FilePermissions"/> class.
+            </summary>
+            <param name="permissions">The permissions.</param>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Managed.Adb.FilePermissions.#ctor(Managed.Adb.FilePermission,Managed.Adb.FilePermission,Managed.Adb.FilePermission)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Managed.Adb.FilePermissions"/> class.
+            </summary>
+            <param name="user">The user.</param>
+            <param name="group">The group.</param>
+            <param name="other">The other.</param>
+        </member>
+        <member name="P:Managed.Adb.FilePermissions.User">
+            <summary>
+            Gets or sets the user permission.
+            </summary>
+            <value>
+            The user.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.FilePermissions.Group">
+            <summary>
+            Gets or sets the group permission.
+            </summary>
+            <value>
+            The group.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.FilePermissions.Other">
+            <summary>
+            Gets or sets the other permission.
+            </summary>
+            <value>
+            The other.
+            </value>
+        </member>
+        <member name="M:Managed.Adb.FilePermissions.ToString">
+            <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+        </member>
+        <member name="M:Managed.Adb.FilePermissions.ToChmod">
+            <summary>
+            Converts to string that can be used in a chmod command.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Managed.Adb.FilePermission">
             <summary>
             
@@ -5380,12 +5714,12 @@
         </member>
         <member name="M:Managed.Adb.FilePermission.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="!:Permission"/> class.
+            Initializes a new instance of the <see cref="T:Managed.Adb.FilePermission"/> class.
             </summary>
         </member>
         <member name="M:Managed.Adb.FilePermission.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="!:Permission"/> class.
+            Initializes a new instance of the <see cref="T:Managed.Adb.FilePermission"/> class.
             </summary>
             <param name="linuxPermissions">The linux permissions.</param>
         </member>
@@ -5417,11 +5751,24 @@
             	<c>true</c> if this instance can delete; otherwise, <c>false</c>.
             </value>
         </member>
+        <member name="M:Managed.Adb.FilePermission.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>
+            A string that represents the current object.
+            </returns>
+        </member>
         <member name="M:Managed.Adb.FilePermission.ToChmod">
             <summary>
             Converts the permissions to bit value that can be casted to an integer and used for calling chmod
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:Managed.Adb.FileSystem">
+            <summary>
+            
+            </summary>
         </member>
         <member name="M:Managed.Adb.FileSystem.#ctor(Managed.Adb.Device)">
             <summary>
@@ -5471,7 +5818,7 @@
             Makes the directory.
             </summary>
             <param name="path">The path.</param>
-            <param name="forceDeviceMethod">if set to <c>true</c> forces the use of the "non-busybox" method.</param>
+            <param name="forceDeviceMethod">No longer has any difference to what is executed.</param>
         </member>
         <member name="M:Managed.Adb.FileSystem.MakeDirectoryFallbackInternal(System.String,Managed.Adb.CommandErrorReceiver)">
             <summary>
@@ -5535,6 +5882,7 @@
             </summary>
             <param name="fileEntry">The file entry.</param>
             <exception cref="T:System.IO.IOException">If the command fails.</exception>
+            <exception cref="T:System.ArgumentNullException">If device is null or if path is null or empty.</exception>
         </member>
         <member name="P:Managed.Adb.FileSystem.DeviceBlocks">
             <summary>
@@ -5646,6 +5994,365 @@
         <member name="M:Managed.Adb.GetPropReceiver.Done">
             <summary>
             Finishes the receiver
+            </summary>
+        </member>
+        <member name="T:Managed.Adb.ClientChangeState">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientChangeState.Name">
+            <summary>
+            The name
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientChangeState.DebuggerStatus">
+            <summary>
+            The debugger status
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientChangeState.Port">
+            <summary>
+            The port
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientChangeState.ThreadMode">
+            <summary>
+            The thread mode
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientChangeState.ThreadData">
+            <summary>
+            The thread data
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientChangeState.HeapMode">
+            <summary>
+            The heap mode
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientChangeState.HeapData">
+            <summary>
+            The heap data
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientChangeState.NativeHeapData">
+            <summary>
+            The native heap data
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientChangeState.ThreadStackTrace">
+            <summary>
+            The thread stack trace
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientChangeState.HeapAllocations">
+            <summary>
+            The heap allocations
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientChangeState.HeapAllocationStatus">
+            <summary>
+            The heap allocation status
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientChangeState.MethodProfilingStatus">
+            <summary>
+            The method profiling status
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientChangeState.Info">
+            <summary>
+            The information
+            </summary>
+        </member>
+        <member name="T:Managed.Adb.ClientConnectionState">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientConnectionState.Init">
+            <summary>
+            The initialize
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientConnectionState.NotJDWP">
+            <summary>
+            The not JDWP
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientConnectionState.AwaitShake">
+            <summary>
+            The await shake
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientConnectionState.NeedDDMPacket">
+            <summary>
+            The need DDM packet
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientConnectionState.NotDDM">
+            <summary>
+            The not DDM
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientConnectionState.Ready">
+            <summary>
+            The ready
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientConnectionState.Error">
+            <summary>
+            The error
+            </summary>
+        </member>
+        <member name="F:Managed.Adb.ClientConnectionState.Disconnected">
+            <summary>
+            The disconnected
+            </summary>
+        </member>
+        <member name="T:Managed.Adb.IClient">
+            <summary>
+            
+            </summary>
+            <seealso cref="T:Managed.Adb.IPacketConsumer" />
+        </member>
+        <member name="P:Managed.Adb.IClient.ConnectionState">
+            <summary>
+            Gets the state of the connection.
+            </summary>
+            <value>
+            The state of the connection.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.IClient.ChangeState">
+            <summary>
+            Gets the state of the change.
+            </summary>
+            <value>
+            The state of the change.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.IClient.Channel">
+            <summary>
+            Gets or sets the channel.
+            </summary>
+            <value>
+            The channel.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.IClient.Device">
+            <summary>
+            Gets the device.
+            </summary>
+            <value>
+            The device.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.IClient.DeviceImplementation">
+            <summary>
+            Gets the device implementation.
+            </summary>
+            <value>
+            The device implementation.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.IClient.DebuggerListenPort">
+            <summary>
+            Gets the debugger listen port.
+            </summary>
+            <value>
+            The debugger listen port.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.IClient.IsDdmAware">
+            <summary>
+            Gets a value indicating whether this instance is DDM aware.
+            </summary>
+            <value>
+            <c>true</c> if this instance is DDM aware; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.IClient.IsDebuggerAttached">
+            <summary>
+            Gets a value indicating whether this instance is debugger attached.
+            </summary>
+            <value>
+            <c>true</c> if this instance is debugger attached; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.IClient.Debugger">
+            <summary>
+            Gets the debugger.
+            </summary>
+            <value>
+            The debugger.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.IClient.ClientData">
+            <summary>
+            Gets the client data.
+            </summary>
+            <value>
+            The client data.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.IClient.IsThreadUpdateEnabled">
+            <summary>
+            Gets or sets a value indicating whether this instance is thread update enabled.
+            </summary>
+            <value>
+            <c>true</c> if this instance is thread update enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.IClient.IsHeapUpdateEnabled">
+            <summary>
+            Gets or sets a value indicating whether this instance is heap update enabled.
+            </summary>
+            <value>
+            <c>true</c> if this instance is heap update enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.IClient.IsSelectedClient">
+            <summary>
+            Gets or sets a value indicating whether this instance is selected client.
+            </summary>
+            <value>
+            <c>true</c> if this instance is selected client; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.IClient.IsValid">
+            <summary>
+            Returns true if ... is valid.
+            </summary>
+            <value>
+              <c>true</c> if this instance is valid; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="M:Managed.Adb.IClient.ExecuteGarbageCollector">
+            <summary>
+            Executes the garbage collector.
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.IClient.DumpHprof">
+            <summary>
+            Dumps the hprof.
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.IClient.ToggleMethodProfiling">
+            <summary>
+            Toggles the method profiling.
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.IClient.RequestMethodProfilingStatus">
+            <summary>
+            Requests the method profiling status.
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.IClient.RequestThreadUpdate">
+            <summary>
+            Requests the thread update.
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.IClient.RequestThreadStackTrace(System.Int32)">
+            <summary>
+            Requests the thread stack trace.
+            </summary>
+            <param name="threadID">The thread identifier.</param>
+        </member>
+        <member name="M:Managed.Adb.IClient.RequestNativeHeapInformation">
+            <summary>
+            Requests the native heap information.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Managed.Adb.IClient.EnableAllocationTracker(System.Boolean)">
+            <summary>
+            Enables the allocation tracker.
+            </summary>
+            <param name="enable">if set to <c>true</c> [enable].</param>
+        </member>
+        <member name="M:Managed.Adb.IClient.RequestAllocationStatus">
+            <summary>
+            Requests the allocation status.
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.IClient.RequestAllocationDetails">
+            <summary>
+            Requests the allocation details.
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.IClient.Kill">
+            <summary>
+            Kills this instance.
+            </summary>
+        </member>
+        <member name="M:Managed.Adb.IClient.Register(System.Object)">
+            <summary>
+            Registers the specified selector.
+            </summary>
+            <param name="selector">The selector.</param>
+        </member>
+        <member name="M:Managed.Adb.IClient.ListenForDebugger(System.Int32)">
+            <summary>
+            Listens for debugger.
+            </summary>
+            <param name="listenPort">The listen port.</param>
+        </member>
+        <member name="M:Managed.Adb.IClient.SendAndConsume(System.Object,Managed.Adb.ChunkHandler)">
+            <summary>
+            Sends the and consume.
+            </summary>
+            <param name="packet">The packet.</param>
+            <param name="replyHandler">The reply handler.</param>
+        </member>
+        <member name="M:Managed.Adb.IClient.AddRequestId(System.Int32,Managed.Adb.ChunkHandler)">
+            <summary>
+            Adds the request identifier.
+            </summary>
+            <param name="id">The identifier.</param>
+            <param name="handler">The handler.</param>
+        </member>
+        <member name="M:Managed.Adb.IClient.RemoveRequestId(System.Int32)">
+            <summary>
+            Removes the request identifier.
+            </summary>
+            <param name="id">The identifier.</param>
+        </member>
+        <member name="M:Managed.Adb.IClient.IsResponseToUs(System.Int32)">
+            <summary>
+            Determines whether [is response to us] [the specified identifier].
+            </summary>
+            <param name="id">The identifier.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Managed.Adb.IClient.PacketFailed(System.Object)">
+            <summary>
+            Packets the failed.
+            </summary>
+            <param name="packet">The packet.</param>
+        </member>
+        <member name="M:Managed.Adb.IClient.DdmSeen">
+            <summary>
+            DDMs the seen.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Managed.Adb.IClient.Close(System.Boolean)">
+            <summary>
+            Closes the specified notify.
+            </summary>
+            <param name="notify">if set to <c>true</c> [notify].</param>
+        </member>
+        <member name="M:Managed.Adb.IClient.Update(Managed.Adb.ClientChangeMask)">
+            <summary>
+            Updates the specified change mask.
+            </summary>
+            <param name="changeMask">The change mask.</param>
+        </member>
+        <member name="T:Managed.Adb.IDebugPortProvider">
+            <summary>
+            
             </summary>
         </member>
         <member name="M:Managed.Adb.IDebugPortProvider.getPort(Managed.Adb.IDevice,System.String)">
@@ -5809,18 +6516,24 @@
         </member>
         <member name="P:Managed.Adb.IDevice.SyncService">
             <summary>
-            Returns a <see cref="P:Managed.Adb.IDevice.SyncService"/> object to push / pull files to and from the device.
+            Returns a <see cref="P:Managed.Adb.IDevice.SyncService" /> object to push / pull files to and from the device.
             </summary>
+            <value>
+            The synchronize service.
+            </value>
+            <exception cref="T:System.IO.IOException">Throws IOException if the connection with adb failed.</exception>
             <remarks>
             <code>null</code> if the SyncService couldn't be created. This can happen if adb
             refuse to open the connection because the {@link IDevice} is invalid (or got disconnected).
             </remarks>
-            <exception cref="!:IOException">Throws IOException if the connection with adb failed.</exception>
         </member>
         <member name="P:Managed.Adb.IDevice.FileListingService">
             <summary>
-            Returns a <see cref="P:Managed.Adb.IDevice.FileListingService"/> for this device.
+            Returns a <see cref="P:Managed.Adb.IDevice.FileListingService" /> for this device.
             </summary>
+            <value>
+            The file listing service.
+            </value>
         </member>
         <member name="P:Managed.Adb.IDevice.Screenshot">
             <summary>
@@ -5835,7 +6548,14 @@
             <param name="command">The command to execute</param>
             <param name="receiver">The receiver object getting the result from the command.</param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Managed.Adb.IDevice.ExecuteShellCommand(System.String,Managed.Adb.IShellOutputReceiver,System.Int32)" -->
+        <member name="M:Managed.Adb.IDevice.ExecuteShellCommand(System.String,Managed.Adb.IShellOutputReceiver,System.Int32)">
+            <summary>
+            Executes a shell command on the device, and sends the result to a receiver.
+            </summary>
+            <param name="command">The command to execute</param>
+            <param name="receiver">The receiver object getting the result from the command.</param>
+            <param name="maxTimeToOutputResponse">The max time to output response.</param>
+        </member>
         <member name="M:Managed.Adb.IDevice.ExecuteShellCommand(System.String,Managed.Adb.IShellOutputReceiver,System.Object[])">
             <summary>
             Executes a shell command on the device, and sends the result to a receiver.
@@ -5893,6 +6613,14 @@
             <param name="remotePort">the remote port.</param>
             <returns><code>true</code> if success.</returns>
         </member>
+        <member name="M:Managed.Adb.IDevice.CreateReverseForward(System.Int32,System.Int32)">
+            <summary>
+            Creates a reverse port forwarding between a local and a remote port.
+            </summary>
+            <param name="remotePort">the remote port to forward</param>
+            <param name="localPort">the local port.</param>
+            <returns><code>true</code> if success.</returns>
+        </member>
         <member name="M:Managed.Adb.IDevice.RemoveForward(System.Int32)">
             <summary>
             Removes a port forwarding between a local and a remote port.
@@ -5914,8 +6642,10 @@
             Pushes a file to device
             </summary>
             <param name="localFilePath">the absolute path to file on local host</param>
-            <returns>destination path on device for file</returns>
-            <exception cref="!:IOException">if fatal error occurred when pushing file</exception>
+            <returns>
+            destination path on device for file
+            </returns>
+            <exception cref="T:System.IO.IOException">if fatal error occurred when pushing file</exception>
         </member>
         <member name="M:Managed.Adb.IDevice.InstallRemotePackage(System.String,System.Boolean)">
             <summary>
@@ -5929,15 +6659,15 @@
             Remove a file from device
             </summary>
             <param name="remoteFilePath">path on device of file to remove</param>
-            <exception cref="!:IOException">if file removal failed</exception>
+            <exception cref="T:System.IO.IOException">if file removal failed</exception>
         </member>
         <member name="M:Managed.Adb.IDevice.UninstallPackage(System.String)">
             <summary>
             Uninstall an package from the device.
             </summary>
             <param name="packageName">Name of the package.</param>
-            <exception cref="!:IOException"></exception>
-            <exception cref="!:PackageInstallException"></exception>
+            <exception cref="T:System.IO.IOException"></exception>
+            <exception cref="T:Managed.Adb.Exceptions.PackageInstallationException"></exception>
         </member>
         <member name="M:Managed.Adb.IDevice.RefreshEnvironmentVariables">
             <summary>
@@ -6039,6 +6769,12 @@
             Reads this instance.
             </summary>
         </member>
+        <member name="M:Managed.Adb.IPacketConsumer.GetJdwpPacket">
+            <summary>
+            Gets the JDWP packet.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Managed.Adb.IPacketConsumer.ForwardPacketToClient(System.Object)">
             <summary>
             Forwards the packet to client.
@@ -6109,6 +6845,7 @@
             <summary>
             Sent when a sub task is started.
             </summary>
+            <param name="source">The source.</param>
             <param name="destination">the destination.</param>
         </member>
         <member name="M:Managed.Adb.ISyncProgressMonitor.Advance(System.Int64)">
@@ -6116,6 +6853,31 @@
             Sent when some progress have been made.
             </summary>
             <param name="work">the amount of work done.</param>
+        </member>
+        <member name="T:Managed.Adb.LinkResoverReceiver">
+            <summary>
+            
+            </summary>
+            <seealso cref="T:Managed.Adb.MultiLineReceiver" />
+        </member>
+        <member name="M:Managed.Adb.LinkResoverReceiver.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Managed.Adb.LinkResoverReceiver"/> class.
+            </summary>
+        </member>
+        <member name="P:Managed.Adb.LinkResoverReceiver.ResolvedPath">
+            <summary>
+            Gets or sets the resolved path.
+            </summary>
+            <value>
+            The resolved path.
+            </value>
+        </member>
+        <member name="M:Managed.Adb.LinkResoverReceiver.ProcessNewLines(System.String[])">
+            <summary>
+            Processes the new lines.
+            </summary>
+            <param name="lines">The lines.</param>
         </member>
         <member name="T:Managed.Adb.ListingServiceReceiver">
             <summary>
@@ -6273,7 +7035,7 @@
             Outputs a Info level message.
             </summary>
             <param name="tag">The tag associated with the message.</param>
-            <param name="format">The message to output.</param>
+            <param name="message">The message.</param>
         </member>
         <member name="M:Managed.Adb.Log.i(System.String,System.String,System.Object[])">
             <summary>
@@ -6453,6 +7215,13 @@
             </summary>
             <value>The levels.</value>
         </member>
+        <member name="M:Managed.Adb.LogLevel.GetByString(System.String)">
+            <summary>
+            Gets the by string.
+            </summary>
+            <param name="value">The value.</param>
+            <returns></returns>
+        </member>
         <member name="M:Managed.Adb.LogLevel.GetByLetter(System.String)">
             <summary>
             Gets the by letter.
@@ -6573,6 +7342,13 @@
             Sets the debug selected port.
             </summary>
             <param name="value">The value.</param>
+        </member>
+        <member name="M:Managed.Adb.MonitorThread.DropClient(Managed.Adb.IClient,System.Boolean)">
+            <summary>
+            Drops the client.
+            </summary>
+            <param name="client">The client.</param>
+            <param name="notify">if set to <c>true</c> [notify].</param>
         </member>
         <member name="T:Managed.Adb.MountPoint">
             <summary>
@@ -7015,6 +7791,17 @@
             Gets the error code
             </summary>
         </member>
+        <member name="T:Managed.Adb.SyncService">
+            <summary>
+            
+            </summary>
+            <seealso cref="T:System.IDisposable" />
+        </member>
+        <member name="T:Managed.Adb.SyncService.FileMode">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="F:Managed.Adb.SyncService.FileMode.UNKNOWN">
             <summary>
             The unknown
@@ -7055,12 +7842,25 @@
             The fifo
             </summary>
         </member>
+        <member name="M:Managed.Adb.SyncService.#cctor">
+            <summary>
+            Initializes the <see cref="T:Managed.Adb.SyncService"/> class.
+            </summary>
+        </member>
         <member name="P:Managed.Adb.SyncService.NullProgressMonitor">
             <summary>
             Gets the null progress monitor.
             </summary>
             <value>
             The null progress monitor.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.SyncService.DataBuffer">
+            <summary>
+            Gets or sets the data buffer.
+            </summary>
+            <value>
+            The data buffer.
             </value>
         </member>
         <member name="M:Managed.Adb.SyncService.CheckResult(System.Byte[],System.Byte[])">
@@ -7110,6 +7910,24 @@
             <param name="path">he path, as a byte array, of the remote file on which to execute the command</param>
             <returns>the byte[] to send to the device through adb</returns>
         </member>
+        <member name="M:Managed.Adb.SyncService.CreateSendFileRequest(System.String,System.String,Managed.Adb.SyncService.FileMode)">
+            <summary>
+            Creates the send file request.
+            </summary>
+            <param name="command">The command.</param>
+            <param name="path">The path.</param>
+            <param name="mode">The mode.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Managed.Adb.SyncService.CreateSendFileRequest(System.Byte[],System.Byte[],Managed.Adb.SyncService.FileMode)">
+            <summary>
+            Creates the send file request.
+            </summary>
+            <param name="command">The command.</param>
+            <param name="path">The path.</param>
+            <param name="mode">The mode.</param>
+            <returns></returns>
+        </member>
         <member name="M:Managed.Adb.SyncService.#ctor(Managed.Adb.Device)">
             <summary>
             Initializes a new instance of the <see cref="T:Managed.Adb.SyncService"/> class.
@@ -7137,6 +7955,14 @@
             </summary>
             <value>
             The device.
+            </value>
+        </member>
+        <member name="P:Managed.Adb.SyncService.Channel">
+            <summary>
+            Gets or sets the channel.
+            </summary>
+            <value>
+            The channel.
             </value>
         </member>
         <member name="P:Managed.Adb.SyncService.IsOpen">
@@ -7243,6 +8069,16 @@
             <exception cref="T:System.ArgumentNullException">monitor;Monitor cannot be null</exception>
             <exception cref="T:System.ArgumentNullException">Throws if monitor is null</exception>
         </member>
+        <member name="M:Managed.Adb.SyncService.DoPush(System.Collections.Generic.IEnumerable{System.IO.FileSystemInfo},System.String,Managed.Adb.ISyncProgressMonitor)">
+            <summary>
+            Does the push.
+            </summary>
+            <param name="files">The files.</param>
+            <param name="remotePath">The remote path.</param>
+            <param name="monitor">The monitor.</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException">monitor;Monitor cannot be null</exception>
+        </member>
         <member name="M:Managed.Adb.SyncService.DoPullFile(System.String,System.String,Managed.Adb.ISyncProgressMonitor)">
             <summary>
             Pulls a remote file
@@ -7255,15 +8091,15 @@
         </member>
         <member name="M:Managed.Adb.SyncService.DoPull(System.Collections.Generic.IEnumerable{Managed.Adb.FileEntry},System.String,Managed.Adb.FileListingService,Managed.Adb.ISyncProgressMonitor)">
             <summary>
-            
+            Does the pull.
             </summary>
-            <param name="entries"></param>
-            <param name="localPath"></param>
-            <param name="fls"></param>
-            <param name="monitor"></param>
+            <param name="entries">The entries.</param>
+            <param name="localPath">The local path.</param>
+            <param name="fileListingService">The file listing service.</param>
+            <param name="monitor">The monitor.</param>
             <returns></returns>
-            <exception cref="T:System.IO.IOException">Throws if unable to create a file or folder</exception>
             <exception cref="T:System.ArgumentNullException">Throws if the ISyncProgressMonitor is null</exception>
+            <exception cref="T:System.IO.IOException">Throws if unable to create a file or folder</exception>
         </member>
         <member name="M:Managed.Adb.SyncService.GetTotalRemoteFileSize(System.Collections.Generic.IEnumerable{Managed.Adb.FileEntry},Managed.Adb.FileListingService)">
             <summary>
@@ -7277,9 +8113,13 @@
             <summary>
             compute the recursive file size of all the files in the list. Folders have a weight of 1.
             </summary>
-            <param name="files">The local files / folders</param>
-            <returns>The total number of bytes</returns>
-            <remarks>This does not check for circular links.</remarks>
+            <param name="fsis">The fsis.</param>
+            <returns>
+            The total number of bytes
+            </returns>
+            <remarks>
+            This does not check for circular links.
+            </remarks>
         </member>
         <member name="M:Managed.Adb.SyncService.ReadMode(System.String)">
             <summary>
