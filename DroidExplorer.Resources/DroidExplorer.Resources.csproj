@@ -331,7 +331,7 @@
     <Content Include="Assets\[DEFAULT].ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\[default].png">
+    <Content Include="Assets\[DEFAULT].png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\watch-import.png" />
